@@ -6,10 +6,7 @@
     "precompile": "rimraf app/**/*.js test/**/*.js",
     "compile": "tsc",
     "pretest": "rimraf app/**/*.js test/**/*.js",
-    "test:jest": "jest",
-    "test:jest:watch": "jest --watchAll",
-    "test:mocha": "nyc mocha",
-    "test:vitest": "vitest --coverage"
+    "test": "jest"
   },
   "license": "MIT",
   "private": true,

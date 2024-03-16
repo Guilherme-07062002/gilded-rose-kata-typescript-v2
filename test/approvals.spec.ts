@@ -46,7 +46,7 @@ describe('Gilded Rose Approval', () => {
 
   it('should thirtyDays', () => {
     process.argv = ["<node>", "<script", "30"];
-    require('../golden-master-text-test.ts');
+    require('./golden-master-text-test.ts');
        
     expect(gameConsoleOutput).toMatchSnapshot();
   });
