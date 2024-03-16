@@ -1,9 +1,12 @@
 import { Item, GildedRose } from '@/gilded-rose';
 
-describe('Gilded Rose', () => {
+describe('testing gilded rose', () => {
   it('should foo', () => {
-    const gildedRose = new GildedRose([new Item('foo', 0, 0)]);
+    const given = [new Item('foo', 0, 0)];
+    const gildedRose = new GildedRose(given);
+
     const items = gildedRose.updateQuality();
-    expect(items[0].name).toBe('fixme');
+
+    expect(items[0].name).toBe('foo');
   });
 });
