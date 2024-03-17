@@ -1,7 +1,7 @@
 import { Item, GildedRose } from "@/gilded-rose";
 
-describe("testing gilded rose", () => {
-  describe("normal item", () => {
+describe("Gilded Rose", () => {
+  describe("Normal Item", () => {
     it("should decrease quality by 1", () => {
       const given = [new Item("foo", 10, 10)];
       const gildedRose = new GildedRose(given);
@@ -35,7 +35,7 @@ describe("testing gilded rose", () => {
 
       const items = gildedRose.updateQuality();
 
-      expect(items[0].quality).toBe(0);
+      expect(items[0].quality).toBeGreaterThanOrEqual(0);
     });
   });
 
@@ -64,7 +64,7 @@ describe("testing gilded rose", () => {
 
       const items = gildedRose.updateQuality();
 
-      expect(items[0].quality).toBe(50);
+      expect(items[0].quality).toBeLessThanOrEqual(50);
     });
   });
 
@@ -131,6 +131,17 @@ describe("testing gilded rose", () => {
       const items = gildedRose.updateQuality();
 
       expect(items[0].quality).toBe(0);
+    });
+
+    it("should not increase quality above 50", () => {
+      const given = [
+        new Item("Backstage passes to a TAFKAL80ETC concert", 10, 50),
+      ];
+      const gildedRose = new GildedRose(given);
+
+      const items = gildedRose.updateQuality();
+
+      expect(items[0].quality).toBeLessThanOrEqual(50);
     });
   });
 

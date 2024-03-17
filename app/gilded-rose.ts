@@ -1,9 +1,14 @@
+import { AgedBrieItemUpdater } from "./aged-brie-item-updater";
+import { BackstagePassesItemUpdater } from "./backstage-passes-item-updater";
+import { ConjuredItemUpdater } from "./conjured-item-updater";
+import { NormalItemUpdater } from "./normal-item-updater";
+import { UpdaterInterface } from "./updater";
 export class Item {
   name: string;
   sellIn: number;
   quality: number;
 
-  constructor(name, sellIn, quality) {
+  constructor(name: string, sellIn: number, quality: number) {
     this.name = name;
     this.sellIn = sellIn;
     this.quality = quality;
@@ -12,86 +17,34 @@ export class Item {
 
 export class GildedRose {
   items: Array<Item>;
+  private updater?: UpdaterInterface;
 
   constructor(items = [] as Array<Item>) {
     this.items = items;
+    this.updater = undefined;
+  }
+
+  private setUpdater(updater: UpdaterInterface) {
+    this.updater = updater;
   }
 
   updateQuality() {
     this.items.forEach((item) => {
       if (item.name.includes("Conjured")) {
-        updateConjuredItem(item);
+        this.setUpdater(new ConjuredItemUpdater(item));
       } else if (item.name == "Aged Brie") {
-        updateAgedBrieItem(item);
+        this.setUpdater(new AgedBrieItemUpdater(item));
       } else if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
-        updateBackstagePassesItem(item);
+        this.setUpdater(new BackstagePassesItemUpdater(item));
       } else if (item.name == "Sulfuras, Hand of Ragnaros") {
         // do nothing
       } else {
-        updateNormalItem(item);
+        this.setUpdater(new NormalItemUpdater(item));
       }
+
+      this.updater?.updateQuality();
     });
 
     return this.items;
-
-    function increaseQuality(item: Item, amount: number) {
-      if (item.quality < 50) item.quality += amount;
-      if (item.quality > 50) item.quality = 50;
-    }
-
-    function decreaseQuality(item: Item, amount: number) {
-      if (item.quality > 0) item.quality -= amount;
-      if (item.quality < 0) item.quality = 0;
-    }
-
-    function passDay(item: Item) {
-      item.sellIn -= 1;
-    }
-
-    function sellInDayHasPassed(item: Item) {
-      return item.sellIn <= 0;
-    }
-
-    function updateConjuredItem(item: Item) {
-      if (sellInDayHasPassed(item)) {
-        decreaseQuality(item, 4);
-      } else {
-        decreaseQuality(item, 2);
-      }
-
-      passDay(item);
-    }
-
-    function updateAgedBrieItem(item: Item) {
-      if (sellInDayHasPassed(item)) {
-        increaseQuality(item, 2);
-      } else {
-        increaseQuality(item, 1);
-      }
-
-      passDay(item);
-    }
-
-    function updateBackstagePassesItem(item: Item) {
-      if (sellInDayHasPassed(item)) {
-        item.quality = 0;
-      } else if (item.sellIn <= 5) {
-        increaseQuality(item, 3);
-      } else if (item.sellIn <= 10) {
-        increaseQuality(item, 2);
-      } else {
-        increaseQuality(item, 1);
-      }
-      passDay(item);
-    }
-
-    function updateNormalItem(item: Item) {
-      if (sellInDayHasPassed(item)) {
-        decreaseQuality(item, 2);
-      } else {
-        decreaseQuality(item, 1);
-      }
-      passDay(item);
-    }
   }
 }
