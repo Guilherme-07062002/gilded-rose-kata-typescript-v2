@@ -34,41 +34,47 @@ export class GildedRose {
 
     return this.items;
 
+    function increaseQuality(item: Item, amount: number) {
+      if (item.quality < 50) item.quality += amount;
+      if (item.quality > 50) item.quality = 50;
+    }
+
+    function decreaseQuality(item: Item, amount: number) {
+      if (item.quality > 0) item.quality -= amount;
+      if (item.quality < 0) item.quality = 0;
+    }
+
     function updateConjuredItem(item: Item) {
-      if (item.quality > 0) {
-        item.quality -= 2;
-        if (item.sellIn <= 0) item.quality -= 2;
-      }
+      decreaseQuality(item, 2);
+      if (item.sellIn <= 0) decreaseQuality(item, 2);
+
       item.sellIn -= 1;
     }
 
     function updateAgedBrieItem(item: Item) {
-      if (item.quality < 50) {
-        item.quality += 1;
-        if (item.sellIn <= 0) item.quality += 1;
-      }
+      increaseQuality(item, 1);
+      if (item.sellIn <= 0) increaseQuality(item, 1);
+
       item.sellIn -= 1;
     }
 
     function updateBackstagePassesItem(item: Item) {
-      if (item.quality < 50) {
-        item.quality += 1;
-        if (item.sellIn < 11) {
-          if (item.quality < 50) item.quality += 1;
-        }
-        if (item.sellIn < 6) {
-          if (item.quality < 50) item.quality += 1;
-        }
+      if (item.sellIn <= 0) {
+        item.quality = 0;
+      } else if (item.sellIn <= 5) {
+        increaseQuality(item, 3);
+      } else if (item.sellIn <= 10) {
+        increaseQuality(item, 2);
+      } else {
+        increaseQuality(item, 1);
       }
       item.sellIn -= 1;
-      if (item.sellIn < 0) item.quality -= item.quality;
     }
 
     function updateNormalItem(item: Item) {
-      if (item.quality > 0) {
-        item.quality -= 1;
-        if (item.sellIn <= 0) item.quality -= 1;
-      }
+      decreaseQuality(item, 1);
+      if (item.sellIn <= 0) decreaseQuality(item, 1);
+
       item.sellIn -= 1;
     }
   }
