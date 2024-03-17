@@ -44,25 +44,36 @@ export class GildedRose {
       if (item.quality < 0) item.quality = 0;
     }
 
-    function updateConjuredItem(item: Item) {
-      decreaseQuality(item, 2);
-      if (item.sellIn <= 0) decreaseQuality(item, 2);
-
+    function passDay(item: Item) {
       item.sellIn -= 1;
     }
 
+    function sellInDayHasPassed(item: Item) {
+      return item.sellIn <= 0;
+    }
+
+    function updateConjuredItem(item: Item) {
+      if (sellInDayHasPassed(item)) {
+        decreaseQuality(item, 4);
+      } else {
+        decreaseQuality(item, 2);
+      }
+
+      passDay(item);
+    }
+
     function updateAgedBrieItem(item: Item) {
-      if (item.sellIn <= 0) {
+      if (sellInDayHasPassed(item)) {
         increaseQuality(item, 2);
       } else {
         increaseQuality(item, 1);
       }
 
-      item.sellIn -= 1;
+      passDay(item);
     }
 
     function updateBackstagePassesItem(item: Item) {
-      if (item.sellIn <= 0) {
+      if (sellInDayHasPassed(item)) {
         item.quality = 0;
       } else if (item.sellIn <= 5) {
         increaseQuality(item, 3);
@@ -71,17 +82,16 @@ export class GildedRose {
       } else {
         increaseQuality(item, 1);
       }
-      item.sellIn -= 1;
+      passDay(item);
     }
 
     function updateNormalItem(item: Item) {
-      if (item.sellIn <= 0) {
+      if (sellInDayHasPassed(item)) {
         decreaseQuality(item, 2);
       } else {
         decreaseQuality(item, 1);
       }
-
-      item.sellIn -= 1;
+      passDay(item);
     }
   }
 }
