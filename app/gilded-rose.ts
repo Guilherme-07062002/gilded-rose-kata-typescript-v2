@@ -18,8 +18,7 @@ export class GildedRose {
   }
 
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      const item = this.items[i];
+    this.items.forEach((item) => {
       if (item.name.includes("Conjured")) {
         updateConjuredItem(item);
       } else if (item.name == "Aged Brie") {
@@ -27,11 +26,11 @@ export class GildedRose {
       } else if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
         updateBackstagePassesItem(item);
       } else if (item.name == "Sulfuras, Hand of Ragnaros") {
-        continue;
+        // do nothing
       } else {
         updateNormalItem(item);
       }
-    }
+    });
 
     return this.items;
 
