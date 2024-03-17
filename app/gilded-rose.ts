@@ -22,10 +22,10 @@ export class GildedRose {
       const item = this.items[i];
       if (item.name.includes("Conjured")) {
         updateConjuredItem(item);
+      } else if (item.name == "Aged Brie") {
+        updateAgedBrieItem(item);
       } else {
-        if (item.name == "Aged Brie") {
-          if (item.quality < 50) item.quality += 1;
-        } else if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
+        if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
           if (item.quality < 50) {
             item.quality += 1;
             if (item.name == "Backstage passes to a TAFKAL80ETC concert") {
@@ -63,7 +63,15 @@ export class GildedRose {
     function updateConjuredItem(item: Item) {
       if (item.quality > 0) {
         item.quality -= 2;
-        if (item.sellIn < 0) item.quality -= 2;
+        if (item.sellIn <= 0) item.quality -= 2;
+      }
+      item.sellIn -= 1;
+    }
+
+    function updateAgedBrieItem(item: Item) {
+      if (item.quality < 50) {
+        item.quality += 1;
+        if (item.sellIn <= 0) item.quality += 1;
       }
       item.sellIn -= 1;
     }
